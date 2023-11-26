@@ -12,7 +12,7 @@ const TWITTER_HANDLE = '_buildspace';
 const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
 // Add the domain you will be minting
 const tld = '.blockcoders';
-const CONTRACT_ADDRESS = '0x2cC83a49EEe7b95433377C28622be7F6841A8d79';
+const CONTRACT_ADDRESS = '0x9eb1B6d1eF4EDD2Bb66F31331ed213A973d13108';
 
 const App = () => {
   const [network, setNetwork] = useState('');
@@ -226,6 +226,26 @@ const editRecord = (name) => {
     } 
   }
 
+  const withdrawFunds = async () => {
+    try {
+      const { ethereum } = window;
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const contract = new ethers.Contract(CONTRACT_ADDRESS, contractAbi.abi, signer);
+
+        const tx = await contract.withdraw();
+        await tx.wait();
+
+        console.log("Funds withdrawn successfully!");
+        // You can add a notification or update the UI as needed
+      }
+    } catch (error) {
+      console.error("Error withdrawing funds:", error);
+      // Handle the error as needed (e.g., show an error message)
+    }
+  };
+
   const checkIfWalletIsConnected = async () => {
     const { ethereum } = window;
 
@@ -260,7 +280,7 @@ const editRecord = (name) => {
   // Render methods
   const renderNotConnectedContainer = () => (
     <div className="connect-wallet-container">
-      <img src="https://media.giphy.com/media/3ohhwytHcusSCXXOUg/giphy.gif" alt="Ninja donut gif" />
+      <img src="https://media4.giphy.com/media/Dh5q0sShxgp13DwrvG/200w.webp?cid=ecf05e47c3duvj1ylkp3yr4ehbr14g249drntkt11kgnhsac&ep=v1_gifs_search&rid=200w.webp&ct=g"  alt="Dog coding" />
       {/* Call the connectWallet function we just wrote when the button is clicked */}
       <button onClick={connectWallet} className="cta-button connect-wallet-button">
         Connect Wallet
@@ -270,6 +290,13 @@ const editRecord = (name) => {
 
   // Form to enter domain name and data
   const renderInputForm = () =>{
+  //   if (!network) {
+  //   return (
+  //     <div className="connect-wallet-container">
+  //       <p>Loading network information...</p>
+  //     </div>
+  //   );
+  // }
     if (network !== 'Polygon Mumbai Testnet') {
       return (
         <div className="connect-wallet-container">
@@ -311,9 +338,14 @@ const editRecord = (name) => {
             </div>
           ) : (
             // If editing is not true, the mint button will be returned instead
+            <div>
             <button className='cta-button mint-button' disabled={loading} onClick={mintDomain}>
               Mint
             </button>  
+            <button className='cta-button mint-button' onClick={withdrawFunds}>
+            Withdraw Funds
+          </button>
+          </div>
           )}
       </div>
     );
@@ -335,8 +367,8 @@ const editRecord = (name) => {
       <div className="header-container">
   <header>
     <div className="left">
-      <p className="title">🐱‍👤 BlockCoders Name Service</p>
-      <p className="subtitle">Your immortal API on the blockchain!</p>
+      <p className="title">🙅👩🏻‍💻 BlockCoders Naming Service</p>
+      <p className="subtitle">Built by Kushaal, Lohith, Gowri, Jihan</p>
     </div>
     {/* Display a logo and wallet connection status*/}
     <div className="right">
@@ -346,10 +378,18 @@ const editRecord = (name) => {
   </header>
 </div>
 
+
         {!currentAccount && renderNotConnectedContainer()}
         {/* Render the input form if an account is connected */}
         {currentAccount && renderInputForm()}
+        {/* {currentAccount && (
+          <button className='cta-button mint-button' onClick={withdrawFunds}>
+            Withdraw Funds
+          </button>
+        )} */}
         {mints && renderMints()}
+
+        
 
         <div className="footer-container">
           <img alt="Twitter Logo" className="twitter-logo" src={twitterLogo} />
