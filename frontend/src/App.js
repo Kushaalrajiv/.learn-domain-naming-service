@@ -8,8 +8,8 @@ import ethLogo from './assets/ethlogo.png';
 import { networks } from './utils/networks';
 
 // Constants
-const TWITTER_HANDLE = '_buildspace';
-const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
+const TWITTER_HANDLE = 'blockcoders';
+const TWITTER_LINK = `https://twitter.com/kushaalrajiv`;
 // Add the domain you will be minting
 const tld = '.blockcoders';
 const CONTRACT_ADDRESS = '0x9eb1B6d1eF4EDD2Bb66F31331ed213A973d13108';
@@ -398,7 +398,7 @@ const editRecord = (name) => {
             href={TWITTER_LINK}
             target="_blank"
             rel="noreferrer"
-          >{`built with @${TWITTER_HANDLE}`}</a>
+          >{`built by @${TWITTER_HANDLE}`}</a>
         </div>
       </div>
     </div>
