@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from "react";
 import './styles/App.css';
 import twitterLogo from './assets/twitter-logo.svg';
+import githubLogo from './assets/github.svg';
+import InstagramLogo from './assets/instagram.svg';
+import LinkedinLogo from './assets/linkedin.svg';
 import { ethers } from "ethers";
 import contractAbi from './utils/contractABI.json';
 import polygonLogo from './assets/polygonlogo.png';
 import ethLogo from './assets/ethlogo.png';
 import { networks } from './utils/networks';
 
-// Constants
-const TWITTER_HANDLE = 'blockcoders';
-const TWITTER_LINK = `https://twitter.com/kushaalrajiv`;
-// Add the domain you will be minting
-const tld = '.blockcoders';
-const CONTRACT_ADDRESS = '0x9eb1B6d1eF4EDD2Bb66F31331ed213A973d13108';
+
+const TWITTER_HANDLE = 'kushaalrajiv';
+const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
+
+const tld = '.learn';
+const CONTRACT_ADDRESS = '0x4c5a04b98e448B309BD415b5063D9fe574319eDF';
 
 const App = () => {
   const [network, setNetwork] = useState('');
@@ -44,13 +47,12 @@ const App = () => {
   const mintDomain = async () => {
     // Don't run if the domain is empty
     if (!domain) { return }
-    // Alert the user if the domain is too short
+    
     if (domain.length < 3) {
       alert('Domain must be at least 3 characters long');
       return;
     }
-    // Calculate price based on the length of the domain (change this to match your contract)
-    // 3 chars = 0.2 MATIC, 4 chars = 0.3 MATIC, 5 or more = 0.1 MATIC
+    
     const price = domain.length === 3 ? '0.2' : domain.length === 4 ? '0.3' : '0.1';
     console.log("Minting domain", domain, "with price", price);
     try {
@@ -62,7 +64,7 @@ const App = () => {
 
         console.log("Going to pop wallet now to pay gas...")
         let tx = await contract.register(domain, { value: ethers.utils.parseEther(price) });
-        // Wait for the transaction to be mined
+       
         const receipt = await tx.wait();
 
         // Check if the transaction was successfully completed
@@ -94,12 +96,12 @@ const App = () => {
     try {
       const { ethereum } = window;
       if (ethereum) {
-        // You know all this
+        
         const provider = new ethers.providers.Web3Provider(ethereum);
         const signer = provider.getSigner();
         const contract = new ethers.Contract(CONTRACT_ADDRESS, contractAbi.abi, signer);
           
-        // Get all the domain names from our contract
+        
         const names = await contract.getAllNames();
           
         // For each name, get the record and the address
@@ -121,8 +123,6 @@ const App = () => {
       console.log(error);
     }
   }
-
-  // Add this render function next to your other render functions
 const renderMints = () => {
   if (currentAccount && mints.length > 0) {
     return (
@@ -136,7 +136,7 @@ const renderMints = () => {
                   <a className="link" href={`https://testnets.opensea.io/assets/mumbai/${CONTRACT_ADDRESS}/${mint.id}`} target="_blank" rel="noopener noreferrer">
                     <p className="underlined">{' '}{mint.name}{tld}{' '}</p>
                   </a>
-                  {/* If mint.owner is currentAccount, add an "edit" button*/}
+                  
                   { mint.owner.toLowerCase() === currentAccount.toLowerCase() ?
                     <button className="edit-button" onClick={() => editRecord(mint.name)}>
                       <img className="edit-icon" src="https://img.icons8.com/metro/26/000000/pencil.png" alt="Edit button" />
@@ -153,7 +153,6 @@ const renderMints = () => {
   }
 };
 
-// This will take us into edit mode and show us the edit buttons!
 const editRecord = (name) => {
   console.log("Editing record for", name);
   setEditing(true);
@@ -194,8 +193,7 @@ const editRecord = (name) => {
           params: [{ chainId: '0x13881' }], // Check networks.js for hexadecimal network ids
         });
       } catch (error) {
-        // This error code means that the chain we want has not been added to MetaMask
-        // In this case we ask the user to add it to their MetaMask
+        
         if (error.code === 4902) {
           try {
             await window.ethereum.request({
@@ -221,7 +219,6 @@ const editRecord = (name) => {
         console.log(error);
       }
     } else {
-      // If window.ethereum is not found then MetaMask is not installed
       alert('MetaMask is not installed. Please install it to use this app: https://metamask.io/download.html');
     } 
   }
@@ -238,11 +235,11 @@ const editRecord = (name) => {
         await tx.wait();
 
         console.log("Funds withdrawn successfully!");
-        // You can add a notification or update the UI as needed
+        
       }
     } catch (error) {
       console.error("Error withdrawing funds:", error);
-      // Handle the error as needed (e.g., show an error message)
+      
     }
   };
 
@@ -265,7 +262,7 @@ const editRecord = (name) => {
     } else {
       console.log('No authorized account found');
     }
-     // This is the new part, we check the user's network chain ID
+     // we check the user's network chain ID
      const chainId = await ethereum.request({ method: 'eth_chainId' });
      setNetwork(networks[chainId]);
  
@@ -280,8 +277,8 @@ const editRecord = (name) => {
   // Render methods
   const renderNotConnectedContainer = () => (
     <div className="connect-wallet-container">
-      <img src="https://media4.giphy.com/media/Dh5q0sShxgp13DwrvG/200w.webp?cid=ecf05e47c3duvj1ylkp3yr4ehbr14g249drntkt11kgnhsac&ep=v1_gifs_search&rid=200w.webp&ct=g"  alt="Dog coding" />
-      {/* Call the connectWallet function we just wrote when the button is clicked */}
+      <img src="https://media.giphy.com/media/X2xRGTElqdfry/giphy.gif"  alt="Wallet" />
+    
       <button onClick={connectWallet} className="cta-button connect-wallet-button">
         Connect Wallet
       </button>
@@ -290,13 +287,7 @@ const editRecord = (name) => {
 
   // Form to enter domain name and data
   const renderInputForm = () =>{
-  //   if (!network) {
-  //   return (
-  //     <div className="connect-wallet-container">
-  //       <p>Loading network information...</p>
-  //     </div>
-  //   );
-  // }
+  
     if (network !== 'Polygon Mumbai Testnet') {
       return (
         <div className="connect-wallet-container">
@@ -321,23 +312,23 @@ const editRecord = (name) => {
         <input
           type="text"
           value={record}
-          placeholder='whats ur block coding power?'
+          placeholder='What excites you to learn next?'
           onChange={e => setRecord(e.target.value)}
         />
-          {/* If the editing variable is true, return the "Set record" and "Cancel" button */}
+       
           {editing ? (
             <div className="button-container">
-              {/* This will call the updateDomain function we just made */}
+              
               <button className='cta-button mint-button' disabled={loading} onClick={updateDomain}>
                 Set record
               </button>  
-              {/* This will let us get out of editing mode by setting editing to false */}
+        
               <button className='cta-button mint-button' onClick={() => {setEditing(false)}}>
                 Cancel
               </button>  
             </div>
           ) : (
-            // If editing is not true, the mint button will be returned instead
+            
             <div>
             <button className='cta-button mint-button' disabled={loading} onClick={mintDomain}>
               Mint
@@ -367,10 +358,10 @@ const editRecord = (name) => {
       <div className="header-container">
   <header>
     <div className="left">
-      <p className="title">🙅👩🏻‍💻 BlockCoders Naming Service</p>
-      <p className="subtitle">Built by Kushaal, Lohith, Gowri, Jihan</p>
+      <p className="title">👩🏻‍💻 Kushaal's Domain Naming Service</p>
+      <p className="subtitle">Secure your .learn domain and own the NFT that unlocks its potential.</p>
     </div>
-    {/* Display a logo and wallet connection status*/}
+    
     <div className="right">
       <img alt="Network logo" className="logo" src={ network.includes("Polygon") ? polygonLogo : ethLogo} />
       { currentAccount ? <p> Wallet: {currentAccount.slice(0, 6)}...{currentAccount.slice(-4)} </p> : <p> Not connected </p> }
@@ -389,17 +380,12 @@ const editRecord = (name) => {
         )} */}
         {mints && renderMints()}
 
-        
-
-        <div className="footer-container">
-          <img alt="Twitter Logo" className="twitter-logo" src={twitterLogo} />
-          <a
-            className="footer-text"
-            href={TWITTER_LINK}
-            target="_blank"
-            rel="noreferrer"
-          >{`built by @${TWITTER_HANDLE}`}</a>
-        </div>
+        <section className="footer-container">
+          
+          
+          <a href="https://twitter.com/kushaalrajiv"><img alt="Twitter Logo" className="twitter-logo" src={twitterLogo} /></a><a href="https://github.com/Kushaalrajiv"><img alt="Github Logo" className="twitter-logo" src={githubLogo} /></a>
+          <a href="https://www.instagram.com/_kushaal_rajiv14_/"><img alt="Instagram Logo" className="twitter-logo" src={InstagramLogo} /></a><a href="https://www.linkedin.com/in/kushaal-rajiv/"><img alt="Linkedin Logo"  className="twitter-logo" src={LinkedinLogo} /></a>
+        </section>
       </div>
     </div>
   );

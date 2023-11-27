@@ -1,20 +1,14 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.10;
-
-// We first import some OpenZeppelin Contracts.
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
 import {StringUtils} from "./libraries/StringUtils.sol";
-// We import another help function
 import "@openzeppelin/contracts/utils/Base64.sol";
 
 import "hardhat/console.sol";
 
-// We inherit the contract we imported. This means we'll have access
-// to the inherited contract's methods.
 contract Domains is ERC721URIStorage {
-  // Magic given to us by OpenZeppelin to help us keep track of tokenIds.
   using Counters for Counters.Counter;
   Counters.Counter private _tokenIds;
 
@@ -43,9 +37,7 @@ contract Domains is ERC721URIStorage {
     uint256 _price = price(name);
     require(msg.value >= _price, "Not enough Matic paid");
     
-    // Combine the name passed into the function  with the TLD
     string memory _name = string(abi.encodePacked(name, ".", tld));
-    // Create the SVG (image) for the NFT with the name
     string memory finalSvg = string(abi.encodePacked(svgPartOne, _name, svgPartTwo));
     uint256 newRecordId = _tokenIds.current();
     uint256 length = StringUtils.strlen(name);
@@ -82,31 +74,13 @@ function price(string calldata name) public pure returns(uint) {
     uint len = StringUtils.strlen(name);
     require(len > 0);
     if (len == 3) {
-      return 5 * 10**17; // 5 MATIC = 5 000 000 000 000 000 000 (18 decimals). We're going with 0.5 Matic cause the faucets don't give a lot
+      return 5 * 10**17; // 5 MATIC = 5 000 000 000 000 000 000 (18 decimals).
     } else if (len == 4) {
-      return 3 * 10**17; // To charge smaller amounts, reduce the decimals. This is 0.3
+      return 3 * 10**17; 
     } else {
       return 1 * 10**17;
     }
   }
-  // Added "payable" modifier to register function
-//   function register(string calldata name) public payable{
-//     require(domains[name] == address(0));
-    
-//     uint _price = price(name);
-
-//     // Check if enough Matic was paid in the transaction
-//     require(msg.value >= _price, "Not enough Matic paid");
-
-//     domains[name] = msg.sender;
-//     console.log("%s has registered a domain!", msg.sender);
-//   }
-//   function register(string calldata name) public {
-//       // Check that the name is unregistered (explained in notes)
-//       require(domains[name] == address(0));
-//       domains[name] = msg.sender;
-//       console.log("%s has registered a domain!", msg.sender);
-//   }
 
   function getAddress(string calldata name) public view returns (address) {
       return domains[name];
@@ -152,5 +126,5 @@ function valid(string calldata name) public pure returns(bool) {
 error Unauthorized();
 error AlreadyRegistered();
 error InvalidName(string name);
-  // We still need the price, getAddress, setRecord and getRecord functions, they just don't change
+  
 }
