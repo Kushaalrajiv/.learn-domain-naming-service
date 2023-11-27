@@ -1,5 +1,5 @@
 body {
-  background-image: url('https://png.pngtree.com/background/20230617/original/pngtree-virtual-space-3d-rendered-abstract-code-blocks-picture-image_3704477.jpg');
+  background-image: url('https://www.telefonica.com/en/wp-content/uploads/sites/5/2022/06/Imagen1.jpg?w=1224&h=673&crop=1');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -152,14 +152,16 @@ header{
 
 .footer-container {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
+  padding-right: 5px;
   padding-bottom: 30px;
 }
 
 .twitter-logo {
-  width: 35px;
-  height: 35px;
+  width: 45px;
+  height: 45px;
+  padding-left: 10px;
 }
 
 .footer-text {
@@ -182,7 +184,7 @@ input{
   background-color: black;
   color: white;
   letter-spacing: 1px;
-  font-size: 26px;
+  font-size: 24px;
   width: 400px;
   margin-bottom: 10px;
   padding: 10px 20px;
@@ -269,6 +271,11 @@ input:focus {
 
 .underlined:hover{
   cursor: pointer;
+}
+
+.foot{
+  display:flex;
+  
 }
 
 /* KeyFrames */
